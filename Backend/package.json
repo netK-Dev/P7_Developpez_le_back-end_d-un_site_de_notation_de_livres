@@ -26,6 +26,8 @@
   },
   "homepage": "https://github.com/netK-Dev/P7_Developpez_le_back-end_d-un_site_de_notation_de_livres#readme",
   "dependencies": {
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "mongodb": "^6.8.0",
+    "mongoose": "^8.6.0"
   }
 }
