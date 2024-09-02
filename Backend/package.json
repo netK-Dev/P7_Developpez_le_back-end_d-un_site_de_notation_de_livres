@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/netK-Dev/P7_Developpez_le_back-end_d-un_site_de_notation_de_livres/issues"
   },
-  "homepage": "https://github.com/netK-Dev/P7_Developpez_le_back-end_d-un_site_de_notation_de_livres#readme"
+  "homepage": "https://github.com/netK-Dev/P7_Developpez_le_back-end_d-un_site_de_notation_de_livres#readme",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
 }
