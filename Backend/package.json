@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "Backend for 'P7_DevWebLivres'",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,13 +11,13 @@
     "url": "git+https://github.com/netK-Dev/P7_Developpez_le_back-end_d-un_site_de_notation_de_livres.git"
   },
   "keywords": [
-    "\"backend\"",
-    "\"node\"",
-    "\"express\"",
-    "\"API\"",
-    "\"REST\"",
-    "\"books\"",
-    "\"P7\""
+    "backend",
+    "node",
+    "express",
+    "API",
+    "REST",
+    "books",
+    "P7"
   ],
   "author": "Doens Hugo",
   "license": "ISC",
