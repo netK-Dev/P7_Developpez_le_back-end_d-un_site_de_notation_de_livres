@@ -28,6 +28,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.6.0"
+    "mongoose": "^8.6.0",
+    "mongoose-unique-validator": "^5.0.1"
   }
 }
