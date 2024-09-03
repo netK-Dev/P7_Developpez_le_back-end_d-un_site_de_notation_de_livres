@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 // Lancement du serveur
-const port = process.env.PORT || 4000; // Définition du port d'écoute
+const port = process.env.PORT; // Définition du port d'écoute
 app.listen(port, () => {
   console.log(`Le serveur est en écoute sur le port ${port}`);
 });
