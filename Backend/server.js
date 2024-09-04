@@ -3,6 +3,7 @@ require('dotenv').config(); // Charger les variables d'environnement depuis le f
 const express = require('express');
 const connectDB = require('./config/mdb'); // Importation de la connexion MongoDB
 const corsMiddleware = require('./middlewares/corsMiddleware');
+const userRoutes = require('./routes/user');
 
 // Création de l'application Express
 const app = express();
@@ -13,13 +14,7 @@ connectDB();
 // Middleware de configuration des en-têtes
 app.use(corsMiddleware);
 
-// Configuration de l'application
-// (Par exemple, middleware, etc.)
-
-// Définition des routes
-app.get('/', (req, res) => {
-  res.send('Bienvenue sur votre serveur Express avec MongoDB connecté !'); // Exemple de route
-});
+// Routes :
 
 // Lancement du serveur
 const port = process.env.PORT; // Définition du port d'écoute
