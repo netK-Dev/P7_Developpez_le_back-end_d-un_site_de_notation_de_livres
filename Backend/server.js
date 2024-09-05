@@ -15,7 +15,7 @@ connectDB();
 app.use(corsMiddleware);
 
 // Routes :
-app.use('/api/users', userRoutes);
+app.use('/api/auth', userRoutes);
 
 // Lancement du serveur
 const port = process.env.PORT; // Définition du port d'écoute
