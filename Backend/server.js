@@ -3,7 +3,7 @@ require('dotenv').config(); // Charger les variables d'environnement depuis le f
 const express = require('express');
 const connectDB = require('./config/mdb');
 const corsMiddleware = require('./middlewares/corsMiddleware');
-const userRoutes = require('./routes/userRoutes');
+const userRoutes = require('./routes/usersRoutes');
 
 // Création de l'application Express
 const app = express();
