@@ -1,5 +1,5 @@
 const multer = require('multer');
-const sharp = require('sharp'); // Ajouter sharp
+const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs');
 
@@ -10,45 +10,43 @@ const MIME_TYPES = {
   'image/webp': 'webp',
 };
 
-const storage = multer.diskStorage({
-  destination: (req, file, callback) => {
-    callback(null, 'images'); // Dossier de stockage
-  },
-  filename: (req, file, callback) => {
-    const name = file.originalname.split(' ').join('_');
-    const extension = MIME_TYPES[file.mimetype];
-    if (!extension) {
-      return callback(new Error('Invalid file type'));
-    }
-    callback(null, name + Date.now() + '.' + extension);
-  },
-});
+// Configuration multer pour uploader dans un buffer
+const storage = multer.memoryStorage(); // Utiliser la mémoire au lieu d'enregistrer directement
 
 const upload = multer({ storage }).single('image');
 
-// Middleware de compression d'image après upload
+// Middleware pour compresser et sauvegarder l'image
 const compressImage = async (req, res, next) => {
   if (!req.file) {
     return next(); // Si aucun fichier, continuer
   }
 
-  const inputPath = req.file.path;
-  const outputPath = path.join('compressed', req.file.filename);
+  const extension = MIME_TYPES[req.file.mimetype];
+  if (!extension) {
+    return next(new Error('Invalid file type')); // Vérification du type MIME
+  }
+
+  const fileName =
+    req.file.originalname.split(' ').join('_') + Date.now() + '.' + extension;
+  const outputPath = path.join('images', fileName);
 
   try {
-    // Compression avec sharp
-    await sharp(inputPath)
-      .resize(800) // Redimensionner à 800px de largeur, conserve l'aspect ratio
-      .jpeg({ quality: 80 }) // Compression en JPEG avec qualité 80%
-      .toFile(outputPath);
+    // Compression avec sharp - traiter l'image depuis le buffer
+    await sharp(req.file.buffer)
+      .resize(800) // Redimensionner à 800px de largeur
+      .jpeg({ quality: 80 }) // Compression avec qualité 80%
+      .toFile(outputPath); // Enregistrer directement dans le répertoire 'images'
 
-    // Supprimer l'image d'origine
-    fs.unlinkSync(inputPath);
-
-    // Remplacer le chemin du fichier compressé
+    // Ajouter le chemin de l'image compressée au req.file pour l'utiliser dans le contrôleur
     req.file.path = outputPath;
-    next();
+    req.file.filename = fileName;
+
+    next(); // Continuer le traitement une fois la compression terminée
   } catch (error) {
+    console.error(
+      "Erreur lors de la compression et de la sauvegarde de l'image:",
+      error
+    );
     next(error); // Gestion des erreurs
   }
 };
