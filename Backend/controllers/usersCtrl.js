@@ -37,7 +37,7 @@ exports.login = (req, res) => {
                 userId: user._id,
                 token: jwt.sign(
                   { userId: user._id },
-                  'RANDOM_DEV_KEY', // Provisoire
+                  process.env.JWT_SECRET, // Utilisation de la clé secrète
                   { expiresIn: '24h' }
                 ),
               });
