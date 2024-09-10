@@ -7,6 +7,7 @@ exports.getAllBooks = (req, res) => {
     .then((books) => res.status(200).json(books)) // Renvoie tous les livres sous forme de JSON
     .catch((error) => res.status(400).json({ error })); // Gère les erreurs
 };
+//
 
 // Contrôleur pour récupérer un livre par son ID
 exports.getOneBook = (req, res) => {
@@ -19,6 +20,7 @@ exports.getOneBook = (req, res) => {
     })
     .catch((error) => res.status(400).json({ error })); // Gérer les erreurs possibles
 };
+//
 
 // Contrôleur pour ajouter un livre
 exports.createBook = (req, res) => {
@@ -37,6 +39,7 @@ exports.createBook = (req, res) => {
     .then(() => res.status(201).json({ message: 'Livre créé !' }))
     .catch((error) => res.status(400).json({ error }));
 };
+//
 
 // Contrôleur pour supprimer un livre
 exports.deleteBook = (req, res) => {
@@ -78,6 +81,7 @@ exports.deleteBook = (req, res) => {
       res.status(500).json({ error });
     });
 };
+//
 
 // Contrôleur pour modifier un livre
 exports.modifyBook = (req, res) => {
@@ -127,6 +131,90 @@ exports.modifyBook = (req, res) => {
     })
     .catch((error) => {
       console.error('Erreur lors de la recherche du livre:', error);
+      res.status(500).json({ error });
+    });
+};
+//
+
+// Contrôleur pour noter un livre
+exports.rateBook = (req, res) => {
+  const userId = req.auth.userId;
+  const { rating } = req.body;
+
+  // Convertir la note en nombre
+  const grade = parseInt(rating, 10);
+  if (isNaN(grade) || grade < 0 || grade > 5) {
+    return res.status(400).json({
+      message: 'Note invalide. Elle doit être un nombre entre 0 et 5.',
+    });
+  }
+
+  // Trouver le livre par ID
+  Book.findOne({ _id: req.params.id })
+    .then((book) => {
+      if (!book) {
+        return res.status(404).json({ message: 'Livre non trouvé !' });
+      }
+
+      // Vérifier si l'utilisateur a déjà noté le livre
+      const existingRating = book.ratings.find(
+        (rating) => rating.userId === userId
+      );
+
+      if (existingRating) {
+        // Mettre à jour la note existante
+        existingRating.grade = grade;
+      } else {
+        // Ajouter une nouvelle note
+        book.ratings.push({ userId, grade });
+      }
+
+      // Calculer la nouvelle moyenne des notes
+      const totalRatings = book.ratings.reduce(
+        (sum, rating) => sum + rating.grade,
+        0
+      );
+      book.averageRating = totalRatings / book.ratings.length;
+
+      // Sauvegarder les modifications dans le livre
+      return book.save();
+    })
+    .then((savedBook) => {
+      // Renvoyer toutes les informations du livre
+      res.status(200).json({
+        message: 'Livre noté avec succès !',
+        id: savedBook._id.toString(), // Convertir l'ID en chaîne si nécessaire
+        averageRating: savedBook.averageRating,
+        ratings: savedBook.ratings,
+        title: savedBook.title, // Titre
+        author: savedBook.author, // Auteur
+        imageUrl: savedBook.imageUrl, // Image du livre
+        year: savedBook.year, // Année de publication
+        genre: savedBook.genre, // Genre du livre
+      });
+    })
+    .catch((error) => {
+      console.error('Erreur lors de la sauvegarde du livre:', error);
+      res.status(500).json({ error });
+    });
+};
+//
+
+// Contrôleur pour récupérer les 3 livres avec la meilleure note moyenne
+exports.getBestRatedBooks = (req, res) => {
+  console.log('Requête reçue pour obtenir les meilleurs livres'); // Log de débogage
+  Book.find()
+    .sort({ averageRating: -1 })
+    .limit(3)
+    .then((books) => {
+      if (!books || books.length === 0) {
+        return res.status(404).json({ message: 'Aucun livre trouvé !' });
+      }
+      console.log('Livres trouvés:', books); // Log des livres trouvés
+      res.status(200).json(books);
+    })
+    .catch((error) => {
+      console.error('Erreur lors de la récupération des livres:', error);
       res.status(500).json({ error });
     });
 };
