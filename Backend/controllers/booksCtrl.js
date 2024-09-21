@@ -174,7 +174,10 @@ exports.rateBook = (req, res) => {
         (sum, rating) => sum + rating.grade,
         0
       );
-      book.averageRating = totalRatings / book.ratings.length;
+      let averageRating = totalRatings / book.ratings.length;
+
+      // Arrondir la moyenne à deux décimales
+      book.averageRating = Math.round(averageRating * 100) / 100;
 
       // Sauvegarder les modifications dans le livre
       return book.save();
@@ -204,7 +207,7 @@ exports.rateBook = (req, res) => {
 exports.getBestRatedBooks = (req, res) => {
   console.log('Requête reçue pour obtenir les meilleurs livres'); // Log de débogage
   Book.find()
-    .sort({ averageRating: -1 })
+    .sort({ averageRating: -1 }) // Trier dans l'ordre décroissant
     .limit(3)
     .then((books) => {
       if (!books || books.length === 0) {
