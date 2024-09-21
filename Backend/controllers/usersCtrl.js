@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userModel = require('../models/usersModel');
 
+// Contrôleur pour gérer l'inscription
 exports.signup = (req, res) => {
   bcrypt
     .hash(req.body.password, 10)
@@ -17,7 +18,9 @@ exports.signup = (req, res) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
+//
 
+// Contrôleur pour gérer la connexion
 exports.login = (req, res) => {
   userModel
     .findOne({ email: req.body.email })
@@ -48,3 +51,4 @@ exports.login = (req, res) => {
     })
     .catch((error) => res.status(500).json({ error }));
 };
+//

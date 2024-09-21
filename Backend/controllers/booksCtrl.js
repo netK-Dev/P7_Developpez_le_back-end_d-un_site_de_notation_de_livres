@@ -43,8 +43,6 @@ exports.createBook = (req, res) => {
 
 // Contrôleur pour supprimer un livre
 exports.deleteBook = (req, res) => {
-  console.log('Tentative de suppression du livre avec ID:', req.params.id); // Debug
-
   Book.findOne({ _id: req.params.id })
     .then((book) => {
       if (!book) {
@@ -59,7 +57,6 @@ exports.deleteBook = (req, res) => {
       }
 
       const filename = book.imageUrl.split('/images/')[1];
-      console.log('Fichier image à supprimer:', filename); // Debug
 
       fs.unlink(`images/${filename}`, (err) => {
         if (err) {
@@ -205,7 +202,6 @@ exports.rateBook = (req, res) => {
 
 // Contrôleur pour récupérer les 3 livres avec la meilleure note moyenne
 exports.getBestRatedBooks = (req, res) => {
-  console.log('Requête reçue pour obtenir les meilleurs livres'); // Log de débogage
   Book.find()
     .sort({ averageRating: -1 }) // Trier dans l'ordre décroissant
     .limit(3)
