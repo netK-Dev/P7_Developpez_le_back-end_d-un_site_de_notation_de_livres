@@ -7,10 +7,7 @@ const corsMiddleware = (req, res, next) => {
     'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization'
   );
   // Permet d'envoyer des requêtes avec les méthodes mentionnées
-  res.setHeader(
-    'Access-Control-Allow-Methods',
-    'GET, POST, PUT, DELETE, PATCH, OPTIONS'
-  );
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
   next();
 };
 
