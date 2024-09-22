@@ -183,7 +183,7 @@ exports.rateBook = (req, res) => {
       // Renvoyer toutes les informations du livre
       res.status(200).json({
         message: 'Livre noté avec succès !',
-        id: savedBook._id.toString(), // Convertir l'ID en chaîne si nécessaire
+        id: savedBook._id,
         averageRating: savedBook.averageRating,
         ratings: savedBook.ratings,
         title: savedBook.title, // Titre
