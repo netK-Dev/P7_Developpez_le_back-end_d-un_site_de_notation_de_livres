@@ -209,7 +209,6 @@ exports.getBestRatedBooks = (req, res) => {
       if (!books || books.length === 0) {
         return res.status(404).json({ message: 'Aucun livre trouvé !' });
       }
-      console.log('Livres trouvés:', books); // Log des livres trouvés
       res.status(200).json(books);
     })
     .catch((error) => {
